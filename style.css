@@ -83,3 +83,101 @@ footer {
     opacity: 1;
   }
 }
+
+/* ---------- ESTILOS DEL BANNER DE COOKIES ---------- */
+.cookie-banner {
+  position: fixed;
+  left: 20px;
+  right: 20px;
+  bottom: 22px;
+  background: rgba(10,10,10,0.95);
+  color: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.6);
+  transform: translateY(20px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .28s ease, transform .3s ease, visibility .3s;
+  z-index: 9999;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+/* cuando visible */
+.cookie-banner.visible {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* contenedor interno */
+.cookie-inner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* texto */
+.cookie-text {
+  flex: 1 1 60%;
+  min-width: 220px;
+}
+.cookie-text p {
+  margin-top: 6px;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+/* acciones */
+.cookie-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+}
+
+/* botones */
+.btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.btn-primary {
+  background: #1f7fff;
+  color: #fff;
+}
+.btn-secondary {
+  background: transparent;
+  color: #ddd;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* meta link (pequeño) */
+.cookie-meta {
+  margin-top: 10px;
+  text-align: right;
+}
+.cookie-meta a {
+  color: #98b2ff;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+/* botón "Gestionar cookies" en footer (pequeño) */
+.manage-btn {
+  background: none;
+  border: none;
+  color: #98b2ff;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.87rem;
+  padding: 0;
+}

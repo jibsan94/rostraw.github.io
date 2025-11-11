@@ -5,18 +5,108 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ROSTRAW</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
-  <!-- <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"> -->
+
+  <!-- ---------- GESTIÓN DE CONSENTIMIENTO Y CARGA CONDICIONAL DE GA ---------- -->
+  <script>
+    // ID de GA que nos diste
+    const GA_MEASUREMENT_ID = 'G-RJ46K2F685';
+
+    // Cargar gtag (dinámicamente) — se llama sólo si hay consentimiento
+    function loadGtag() {
+      if (window.__gtagLoaded) return;
+      window.__gtagLoaded = true;
+
+      // insertar el script externo
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
+      document.head.appendChild(s);
+
+      // inicializar gtag
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', GA_MEASUREMENT_ID, { 'anonymize_ip': true }); // anonimizar IP por GDPR
+    }
+
+    // Leer/guardar consentimiento en localStorage
+    const consentKey = 'rostraw_cookies_consent'; // 'accepted' | 'rejected' | null
+
+    function getConsent() {
+      try { return localStorage.getItem(consentKey); } catch(e) { return null; }
+    }
+    function setConsent(val) {
+      try { localStorage.setItem(consentKey, val); } catch(e) {}
+    }
+
+    // Aplicar el estado al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+      const consent = getConsent();
+      if (consent === 'accepted') {
+        loadGtag();
+        hideCookieBanner();
+      } else if (consent === 'rejected') {
+        hideCookieBanner();
+      } else {
+        // no hay decisión => mostrar banner (se muestra por defecto en HTML)
+        showCookieBanner();
+      }
+    });
+
+    // Mostrar / ocultar banner
+    function showCookieBanner() {
+      const banner = document.getElementById('cookie-banner');
+      if (banner) banner.classList.add('visible');
+    }
+    function hideCookieBanner() {
+      const banner = document.getElementById('cookie-banner');
+      if (banner) banner.classList.remove('visible');
+    }
+
+    // ACCIONES a conectar a botones
+    function acceptCookies() {
+      setConsent('accepted');
+      loadGtag();
+      hideCookieBanner();
+    }
+    function rejectCookies() {
+      setConsent('rejected');
+      hideCookieBanner();
+    }
+
+    // Permite que el usuario cambie su preferencia (ej: botón "Gestionar cookies")
+    function clearConsentAndShow() {
+      try { localStorage.removeItem(consentKey); } catch(e) {}
+      showCookieBanner();
+    }
+  </script>
+  <!-- -------------------------------------------------------------------- -->
 </head>
 <body>
   <main class="container">
     <img src="rostraw-logo.png" alt="ROSTRAW" class="logo" />
     <h1>Estamos trabajando en algo increíble.</h1>
     <p>Nuestra nueva experiencia estará disponible muy pronto.</p>
-    <footer>© 2025 ROSTRAW</footer>
+    <footer>© 2025 ROSTRAW · <button class="manage-btn" onclick="clearConsentAndShow()">Gestionar cookies</button></footer>
   </main>
+
+  <!-- ---------- BANNER DE COOKIES (HTML) ---------- -->
+  <div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Aviso de cookies">
+    <div class="cookie-inner">
+      <div class="cookie-text">
+        <strong>Usamos cookies</strong>
+        <p>Utilizamos cookies para analizar el tráfico del sitio y mejorar la experiencia. Puedes aceptar para habilitar Google Analytics o rechazar si prefieres no ser rastreado.</p>
+      </div>
+      <div class="cookie-actions">
+        <button class="btn btn-secondary" onclick="rejectCookies()">Rechazar</button>
+        <button class="btn btn-primary" onclick="acceptCookies()">Aceptar</button>
+      </div>
+    </div>
+    <div class="cookie-meta">
+      <a href="/politica-cookies.html" target="_blank" rel="noopener">Política de cookies</a> <!-- opcional -->
+    </div>
+  </div>
+  <!-- ------------------------------------------------ -->
 </body>
 </html>
